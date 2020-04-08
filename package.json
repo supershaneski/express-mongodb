@@ -1,7 +1,7 @@
 {
   "name": "express-mongodb",
   "version": "1.0.0",
-  "description": "A simple CRUD application using MongoDB",
+  "description": "A simple CRUD application server using MongoDB as database.",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",

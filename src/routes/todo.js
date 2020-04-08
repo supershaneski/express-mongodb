@@ -14,7 +14,7 @@ MongoClient.connect(`mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.data
 
 router.get('/', async (req, res) => {
     db.collection('todo').find().toArray((err, result) => {
-        if (err) return console.log(err)
+            if (err) return console.log(err)
         res.send(result);
     })
 })
@@ -38,7 +38,10 @@ router.post('/add', async (req, res) => {
     }
     db.collection('todo').insertOne(newTodo, (err, result) => {
         if (err) return console.log(err)
-        res.send(result);
+        res.send({
+            insertedCount: result.insertedCount,
+            insertedData: result.ops
+        })
     })
 })
 
@@ -50,7 +53,15 @@ router.put('/:id', async (req, res) => {
     const updateObj = { name: name, date: date, state: state};
     db.collection('todo').updateOne(selectObj, {$set: updateObj }, (err, result) => {
         if (err) return console.log(err)
-        res.send(result);
+        res.send({
+            modifiedCount: result.modifiedCount,
+            modifiedData: {
+                _id: id,
+                name: name,
+                date: date,
+                state: state
+            }
+        })
     })
 })
 
@@ -60,7 +71,12 @@ router.delete('/:id', async (req, res) => {
     var query = { _id: new ObjectID(id) };
     db.collection('todo').deleteOne(query, (err, result) => {
         if (err) return console.log(err)
-        res.send(result);
+        res.send({
+            deletedCount: result.deletedCount,
+            deletedData: {
+                _id: id
+            }
+        })
     })
 })
 
